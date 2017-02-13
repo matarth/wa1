@@ -1,0 +1,195 @@
+<?php
+
+class Event {
+
+  private $id;
+  private $datum;
+  private $popis;
+  private $nazev;
+  private $maxLidi;
+  private $skupina;
+  private $noEvent = false;
+  private $emptyBox = false;
+  private $pocetLidi;
+  private $cas;
+  private $misto;
+  
+  /**
+   * Konstuktor eventu. $e       - objekt z databazove tabulky Events.
+                        $date    - datum ve spravnem formatu nalezici danemu eventu.
+                        $boolean - boolean ktery rika jestli se bude tento event vypisovat nebo ne.
+   */
+  public function __construct($e, $date, $boolean){
+  
+ //	   $this->pocetLidi = DB::table('Attending')->select('*')->count('idUser')->groupBy('idEvent')->where('idEvent', $this->id);
+//    $this->pocetLidi = DB::table('Attending')->select('*')->where('idEvent', $this->id)->count('*');
+//    $this->pocetLidi = DB::select('SELECT COUNT(*) FROM Attending WHERE idEvent=?', array($this->id));
+      
+    $this->emptyBox = $boolean;  
+    $this->datum = clone($date);
+    if(!is_null($e)){
+      $this->id = $e->id;
+      $this->nazev = $e->nazev;
+      $this->popis = $e->popis;
+      $this->maxLidi = $e->maxLidi;
+      $this->skupina = $e->skupina;
+      $this->cas = $e->cas;
+      $this->misto = $e->misto;
+    }
+    else{
+      $this->noEvent = true;
+    }
+        $this->pocetLidi = DB::table('Attending')->where('idEvent','=',$this->id)->count();
+        
+        if($this->pocetLidi > $this->maxLidi)
+          $this->pocetLidi = $this->maxLidi;
+  }
+  
+  /**
+   * vraci mesic daneho eventu
+   */
+  public function getMonth(){
+    return $this->datum->format("m");
+  }
+  
+ /**
+   * vypise prazdnou kolonku tabulky
+   */
+  public function printEmptyBox(){
+    echo '<td class=neakce>';	
+    echo '</td>';
+  }
+  
+  /**
+    * vypise kolonku kalendare budto jako prazdnou nebo jako odkaz na detaily k eventu.
+    */
+  public function printEventLink(){
+  
+    if($this->emptyBox){
+      echo '<td class=neakceWrongMonth>';	
+        echo $this->datum->format("d");
+      echo '</td>';      
+      return;
+    }
+  
+  
+    if($this->isNull()){
+      echo '<td class=neakce>';	
+      echo $this->datum->format("d");
+      echo '</td>';
+    }
+    
+    else{
+    
+      echo '<td class=akce onClick="window.location.href=\'/event/'.$this->id.'\'">';  
+        echo $this->datum->format("d");
+        $this->printCheckIcon();
+        
+        echo '<div class=eventTooltip>';
+          echo $this->cas.'<br>';
+          echo $this->nazev.'<br>';
+          echo $this->pocetLidi."/".$this->maxLidi;
+        echo '</div>';
+        
+      echo '</td>';
+    }
+  }
+  
+  /**
+   *  Vypise stranku s detaily a moznosti se prihlasit/odhlasit.
+   */
+  
+  public function printEventInfo(){
+  
+    echo "<h2>".$this->nazev."</h2>";
+    echo "<table class=eventTable>";
+      echo "<tr>";
+        echo "<td>";
+          echo "Kdy:";
+        echo "</td>";
+        echo "<td>";
+          echo $this->datum->format("d.m.Y");
+        echo "</td>";
+      echo "</tr>";
+      echo "<tr>";
+        echo "<td>";
+          echo "Kde:";
+        echo "</td>";
+        echo "<td>";
+          echo $this->misto;
+        echo "</td>";
+      echo "</tr>";
+      echo "<tr>";
+        echo "<td>";
+          echo "Čas:";
+        echo "</td>";
+        echo "<td>";
+          echo $this->cas;
+        echo "</td>";
+      echo "</tr>";
+      echo "<tr>";
+        echo "<td>";
+          echo "Detaily:";
+        echo "</td>";
+        echo "<td class=\"detaily\">";
+          echo $this->popis;
+        echo "</td>";
+      echo "</tr>";
+      echo "<tr>";
+        echo "<td>";
+          echo "Přihlášených:";
+        echo "</td>";
+        echo "<td>";
+          echo $this->pocetLidi."/".$this->maxLidi;
+        echo "</td>";
+      echo "</tr>";
+    echo "</table>";
+    
+    
+            
+    if($this->pocetLidi < $this->maxLidi){
+      if(Auth::check()){	
+        if(DB::table('Attending')->where('idEvent','=', $this->id)->where('idUser','=', Auth::User()->id)->count() != 0){
+          echo "Na tuto akci jste již přihlášen<br>";
+          echo '<form><input type="button" value="Odhlásit" onClick="window.location.href=\'../event/unsign/'.$this->id.'\'"></form>';
+        }
+        else{
+          echo '<form><input type="button" value="Přihlásit" onClick="window.location.href=\'../event/sign/'.$this->id.'\'"></form>';
+        }
+      }
+      else{
+        $origURL = '/event/sign/'.$this->id;
+        Session::put('origURL', $origURL);
+        echo '<form><input type="button" value="Přihlásit" onClick="window.location.href=\'../session/create\'"></form>';
+      }
+    }
+    
+    
+  }
+  
+  /**
+   * vrati jestli instance reprezentuje skutecnou akci nebo jen prazdny event.
+   */
+  public function isNull(){
+    return($this->noEvent);
+  }
+  
+  /**
+   *  Zavola view ve kterem se vola printEventInfo().
+   */
+  public function makeView(){
+    return View::make('event', ['event' => $this]);
+  }
+  
+  /**
+   * Zkontroluje jestli je uzivatel prihlasen na danou akci, jestli jo tak do kolonky kalendare nakresli check.
+   */
+  private function printCheckIcon(){
+    if(Auth::check()){
+      if(DB::table('Attending')->where('idEvent','=', $this->id)->where('idUser','=', Auth::User()->id)->count() != 0){
+        echo HTML::image('img/check.png');
+      }
+    }
+  }
+}
+

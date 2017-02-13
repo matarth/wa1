@@ -1,0 +1,9 @@
+Zadání úlohy: Rezervační systém, který umožní uživatelům se registrovat, přihlásit a poté se přihlásit/odhlásit na různé akce. Neregistrovaní uživatelé mohou pouze prohlížet akce a galerii.
+
+Instalace: 1. stahnout composer ("curl -s http://getcomposer.org/installer | php")
+           2. stahnout laravel framework ("composer global require "laravel/installer=~1.1")
+           3. vytvorit projekt ("composer create-project laravel/laravel wa1")
+           4. nastavit prava pro slozky temp a log ("sudo chmod -R a+rw temp log")
+           5. nainstalovat mysql ("sudo apt-get install mysql")
+           6. stahnout adminer ("sudo wget "http://www.adminer.org/latest.php")
+           7. rozebehnout skript dokumentace/startdb.sql.

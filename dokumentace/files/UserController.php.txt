@@ -1,0 +1,134 @@
+<?php
+
+class UserController extends BaseController {
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{
+		//
+	}
+
+
+	/**
+	 * Ukaze stranku s registraci uzivatele.
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+	  return View::Make('user/create');
+	}
+
+
+	/**
+	 * Ulozi uzivatele do databaze, vypise zpravu o uspechu a presmeruje pryc.
+	 *
+	 * @return Response
+	 */
+	public function store()
+	{
+	  
+//	  $users = DB::table('Users')->get();
+//	  echo Input::get('den').Input::get('mesic');
+
+          $caught = false;
+
+
+          $user = new User();
+          $user->Jmeno = Input::get('jmeno')." ".Input::get('prijmeni');
+          $user->Ulice = Input::get('ulice');
+          $user->Mesto = Input::get('mesto');
+          $user->Psc = Input::get('psc');
+          $user->datumnarozeni =  date("Ymd",strtotime(Input::get('den').".".Input::get('mesic').".".Input::get('rok')));
+          $user->Email = Input::get('email');
+          $user->Telefon = Input::get('telefon');
+          $user->password = Hash::make(Input::get('password'));
+          	
+          try{
+            $user->save();
+          } catch (Exception $e){
+            $caught = true;
+            echo '<meta charset="utf-8">';
+            echo '<script> alert("Uživatel již existuje"); window.history.back();</script>';
+          }
+          
+          
+          if(!$caught){
+            $s = "Děkujeme Vám za registraci na webu www.zenysobe.eu";
+            Mail::send('emails.auth.welcome', array('psw' => Input::get('password'), 'email' => Input::get('email')), function($message){
+              $message->to(Input::get('email'), 'registrace')->subject('Registrace Ženysobe');
+            });
+          }
+          
+          echo '<meta charset="utf-8">'; 
+          echo '<script> alert("Uživatel vytvořen"); window.location.href="session/create"</script>';        
+//          return Redirect::to('/calendar');
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		//
+	}
+
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($id)
+	{
+		//
+	}
+
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+		//
+	}
+
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
+	
+	public function printUsers(){
+	  $users = DB::table('Users')->get();
+	  $events = DB::table('Events')->get();
+	  
+	  dd($events);	  	  
+	}
+	
+	
+	/**
+	 * Ukaze stranku administratora.
+	 */
+	public function rootpage(){
+          return View::make('user/root');
+	}
+}
+

@@ -1,0 +1,25 @@
+<?php
+
+class FeedbackController extends BaseController{
+
+  /**
+   * Ukaze stranku 'Napiste nam'.
+   */
+  public function show(){
+    return View::make("feedback");
+  }  
+  
+ /**
+   * Posle email zenam s dotazem od uzivatele.
+   */
+  public function feedback(){
+    
+    mail('info@zenysobe.eu', Input::get('subject'), Input::get('text'), Input::get('email'));
+    
+    echo '<meta charset="utf-8">'; 
+    echo '<script> alert("Dotaz odeslán"); window.history.back();</script>';        
+
+    
+  }
+  
+}

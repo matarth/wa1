@@ -1,0 +1,234 @@
+body{
+  height: 100%;
+}
+
+*{
+  margin: 0;
+  font-family:'verdana';
+}
+
+:required{
+  border: 1px solid #FF0000;
+}
+
+.header_table{
+  width: 80%;
+  background-color: #DC2B19;
+  color: white;
+  font-size: 18;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header_table_div{
+  background: #DC2B19;
+}
+
+.header_table a:link, .header_table a:visited{
+  color: white;
+  text-decoration: none;
+}
+
+.header_table a:hover{
+  color: orange;
+}
+
+.header_table td{
+  text-align: center;
+  width: (100/6)%;
+  margin: 0;
+  padding: 0;
+  vertical-align: center;
+  height: 25px;
+}
+
+img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.spodek {
+  background: #FFFFFF;
+  height: 100%;
+  text-align: center;
+}
+
+.akce,.neakce,.neakceWrongMonth{
+    border: 6px solid #B2B2B2;
+}
+
+.akce{
+  background-color: #B2B2B2;
+  border-color: #DC2B19;
+}
+
+.neakce{
+  background-color: #B2B2B2;
+}
+
+
+.neakceWrongMonth{
+  background-color: #C5C5C5;
+  color: #888888;
+  border-color: #C5C5C5;
+}
+
+.kalendar{
+  align: left;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: separate;
+  border-spacing: 10px 5px;
+}
+
+.kalendar td{
+  height: 60px;
+  width: 60px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.spodek a{
+  text-decoration: none;
+}
+
+.registrace, .login {
+  text-align: right;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+li {
+  display: list-item;
+}
+
+.spodek{
+  margin: 0;
+  padding: 0;
+}
+
+.text{
+  width: 56%;
+  text-align: justify;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: middle;
+}
+
+h1, h2{
+  margin: 0;
+  padding: 0;
+}
+
+.firstRow td{
+  height: 35px;
+  vertical-align: bottom;
+}
+
+.secondRow td{
+  height: 35px;
+  vertical-align: bottom;
+}
+
+.spodek h2 a:link, .spodek h2 a:visited {
+  color: #888888;
+  font-size: 70%;
+}
+
+ul, li{
+    width: 11em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.eventTable{
+  width: 76%;
+  margin-left: auto;
+  margin-right: auto;
+  align: left;
+  border-collapse: separate;
+  border-spacing: 10px 10px;
+  width: 548px;
+}
+
+.eventTable td{
+  text-align: left;
+  vertical-align: top;
+  background-color: #B2B2B2;
+}
+
+.levyIMG{
+  float: left;
+  width: 20%;
+  margin-left: 0%;
+}
+
+.pravyIMG{
+  float: right;
+  width: 20%;
+  margin-right: 0%;
+}
+
+.pokusText{
+    vertical-align: middle;
+    text-align: center; 
+
+}
+
+.logoImg{
+  width: 100%;
+}
+.zapati {
+    clear: both;
+    width: 850px;
+    margin-left: auto;
+    margin-right: auto;    
+}
+
+.zapati img{
+  margin-top: 80px;
+  margin-right: 50px;
+  margin-left: 50px;
+  height: 80px;
+  margin-bottom: 30px;
+  display: inline;
+}
+
+.eventTooltip{
+    display: none;
+    background: #C8C8C8;
+    margin-left: 28px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+    width:auto;
+    height:auto;
+}
+
+.akce:hover .eventTooltip{
+  display: block;
+}
+
+.feedBackTable{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.galleryFrame{
+  border: 0;
+  width: 100%;
+  height: 50rem;
+  scrolling: no;
+  padding: 0px; 
+}
+
+.errorMsg{
+  font-color:#FF0000;
+  font-size: 0.7rem;
+}
+
+.zmenahesla{
+  margin-left: auto;
+  margin-right: auto;  
+}

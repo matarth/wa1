@@ -1,0 +1,64 @@
+<?php
+
+class RootController extends BaseController{
+
+  /**
+   *  Controller pro rootovske operace.
+   */
+  
+  
+  /**
+   *  Vypise interface pro vytvareni eventu.
+   */
+  public function createEvent(){
+    $e = new Events();
+    $e->nazev = Input::get('nazev');
+    $e->popis = Input::get('popis');
+    $e->datum = date("Ymd",strtotime(Input::get('den').".".Input::get('mesic').".".Input::get('rok')));
+    $e->maxLidi = Input::get('pocetlidi');
+    $e->cas = Input::get('cas');
+    $e->misto = Input::get('misto');
+    $e->skupina = "0";
+    if($e->save() != false){
+      echo '<script>alert("Akce vytvorena")</script>';  
+    }
+    else{
+      echo '<script>alert("Akce nevytvorena")</script>';
+    }
+    return Redirect::to('root');
+  }
+  
+  /**
+   *  ukaze seznam vsech eventu
+   */
+  public function eventList(){
+    $akce = DB::table('Events')->get();
+    foreach($akce as $a){
+      echo link_to('root/attendants/'.$a->id, $a->nazev).'<br>';
+    }
+  }
+  
+  /**
+   *  ukaze seznam vsech uzivatelu prihlasenych na event s danym id.
+   */
+  public function attendants($id){
+    $lidi = DB::table('Attending')->where('IdEvent', '=', $id)->get();
+    
+    echo '<table border=1px solid black>';
+    foreach($lidi as $l){
+      $c =  DB::table('Users')->where('Id', '=', $l->idUser)->first();
+      echo '<tr>';
+        echo '<td>';
+          echo $c->Jmeno.'<br>';
+        echo '</td>';
+        echo '<td>';
+          echo $c->Email;
+        echo '</td>';
+      echo '</tr>';
+    }
+    
+    echo '</table>';
+    
+  }
+}
+
